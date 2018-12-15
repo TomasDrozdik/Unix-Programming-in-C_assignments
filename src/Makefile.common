@@ -1,0 +1,18 @@
+.PHONY: cstyle all clean
+
+CC=cc
+CSTD=c99
+CFLAGS=-Wall -pedantic -std=$(CSTD) -Wshadow -Wpointer-arith -Wcast-qual \
+	-Wstrict-prototypes -Werror=implicit-function-declaration -g
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
+
+cstyle:
+	@echo "Checking C style"
+	@find . -type -name '*.[ch]' | while read file; do \
+		../cstyle.pl $$file; \
+	done | grep ':'; \
+	if [ $$? -eq 0]; then \
+		exit 1;
+	fi
