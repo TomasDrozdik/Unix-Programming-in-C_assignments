@@ -6,12 +6,14 @@
 	"configurations": [
 
 		{
-			"name": "(gdb) Launch",
+			"name": "(gdb) Debug Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/src/lab1/a.out",
-			"args": [],
-			"stopAtEntry": true,
+			"program": "${workspaceFolder}/a.out",
+			"args": [
+				"date",
+			],
+			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
 			"externalConsole": false,

@@ -1,0 +1,71 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "c_debug_build",
+			"type": "shell",
+			"command": "gcc",
+			"args": [
+				"-Wall",
+				"-pedantic",
+				"-std=c99",
+				"-Wshadow",
+				"-Wpointer-arith",
+				"-Wcast-qual",
+				"-Wstrict-prototypes",
+				"-Werror=implicit-function-declaration",
+				//"-o ${workspaceFolder}/build/",
+				"-g",
+				"${file}",
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "cstyle-check",
+			"type": "shell",
+			"command": "${workspaceFolder}/src/cstyle.pl",
+			"args": [
+				"${file}",
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true,
+			}
+		},
+		{
+			"label": "valgrind",
+			"type": "shell",
+			"command": "valgrind",
+			"args": [
+				"--leak-check=full",
+				"--show-leak-kinds=all",
+				"--trace-children=yes",
+				"--",
+				"${workspaceFolder}/a.out",
+				"${workspaceFolder}/a.out.in",
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true,
+			}
+		},
+		{
+			"label": "gprof",
+			"type": "shell",
+			"command": "gprof -p",
+			"args": [
+				"${file}",
+				"${workspaceFolder}/a.out.in",
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true,
+			}
+		},
+	]
+}
