@@ -12,6 +12,7 @@
 			"program": "${workspaceFolder}/a.out",
 			"args": [
 				"date",
+				"wc",
 			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",

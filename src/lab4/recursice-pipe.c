@@ -29,6 +29,7 @@ do_child(char **argv, int idx, int prev_pd[2])
 		err(1, "execlp");
 	}
 
+	/* else */
 	if (pipe(next_pd) == -1) { /* create a new pipe */
 		err(1, "pipe");
 	}
