@@ -1,0 +1,5 @@
+
+all: libmin.so
+
+libmin.so: min-library.c
+	cc -shared -o libmin.so min-library.c
