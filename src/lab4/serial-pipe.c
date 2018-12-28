@@ -17,15 +17,15 @@
 int
 main(int argc, char **argv)
 {
-	int i, pid, stat_loc, cmds_count = argc - 1;
-	int prev_pipe[2], next_pipe[2];
+	int i, pid, previous_read_end, cmds_count = argc - 1;
+	int pd[2];
 	char **cmds = argv + 1;
 
 	if (argc < 2) {
 		errx(1, "usage: ./a.out <cmd> ...");
 	}
 
-	if (pipe(next_pipe) == -1) {
+	if (pipe(pd) == -1) {
 		err(1, "pipe");
 	}
 
@@ -37,35 +37,33 @@ main(int argc, char **argv)
 		case 0:
 			/* redirect input */
 			if (i != 0) { /* exclude first cmd */
-				dup2(prev_pipe[0], 0);
-				CLOSE_PIPE(prev_pipe);
+				dup2(previous_read_end, 0);
+				close(previous_read_end);
 			}
 
 			/* redirect output */
 			if (i != cmds_count - 1) { /* exclude last cmd */
-				dup2(next_pipe[1], 1);
-				CLOSE_PIPE(next_pipe);
+				dup2(pd[1], 1);
+				CLOSE_PIPE(pd);
 			}
 
-			fprintf(stderr, "Child %d execing %s\n", getpid(), cmds[i]);
 			execlp(cmds[i], cmds[i], NULL);
 			err(1, "execlp");
 		default:
-			fprintf(stderr, "Spawning process %d\n", pid);
+			close(previous_read_end);
+			close(pd[1]);
 
-			CLOSE_PIPE(prev_pipe);
-			prev_pipe[0] = next_pipe[0];
-			prev_pipe[1] = next_pipe[1];
-			if (pipe(next_pipe) == -1) {
+			previous_read_end = pd[0];
+
+			if (pipe(pd) == -1) {
 				err(1, "pipe");
 			}
 		}
 	}
 
-	CLOSE_PIPE(prev_pipe);
-	CLOSE_PIPE(next_pipe);
+	CLOSE_PIPE(pd);
+	close(previous_read_end);
 
-	fprintf(stderr, "Main waiting for pid %d\n", pid);
-	waitpid(pid, &stat_loc, 0);
+	waitpid(pid, NULL, 0);
 	return (0);
 }
