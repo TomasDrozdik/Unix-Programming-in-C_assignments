@@ -61,6 +61,9 @@ create_connection(char *addrstr, char *portstr)
 		if (connect(fd, (struct sockaddr *)res->ai_addr, res->ai_addrlen) == 0)
 			break;
 	}
+	if (!res)
+		err(1, "connect");
+
 	freeaddrinfo(resorig);
 
 	return (fd);
