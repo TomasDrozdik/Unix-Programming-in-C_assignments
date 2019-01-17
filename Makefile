@@ -1,6 +1,6 @@
 MAKE=make
 
-SUBDIRS= src/lab1
+SUBDIRS= //TODO
 
 all: $(SUBDIRS) cstyle
 

@@ -1,8 +1,8 @@
 .PHONY: cstyle all clean
 
 CC=cc
-CSTD=c99
-CFLAGS=-Wall -pedantic -std=$(CSTD) -Wshadow -Wpointer-arith -Wcast-qual \
+CSTD=c11
+CFLAGS=-Wall -pedantic -Wshadow -Wpointer-arith -Wcast-qual \
 	-Wstrict-prototypes -Werror=implicit-function-declaration -g
 
 %.o: %.c
