@@ -11,7 +11,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_t pool[30][30];
 int thr_left_per_team[30];
 int thrcnt, n, m;
-int teamid,id;
+int teamid = -1, id = -1;
 
 struct thrid { int teamid, id; }; 
 void
@@ -90,8 +90,7 @@ main(int argc, char **argv)
 
 	thrcnt = n * m;
 
-	if ((error = pthread_mutex_lock(&mutex)) != 0)
-		errx(1, "pthread_mutex_lock: %s", strerror(error));
+
 	for (i = 0; i < n; ++i) {
 		thr_left_per_team[i] = m;
 		for (j = 0; j < m; ++j) {
@@ -104,6 +103,9 @@ main(int argc, char **argv)
 			printf("%d/%d started.\n", i, j);
 		}
 	}
+
+	if ((error = pthread_mutex_lock(&mutex)) != 0)
+		errx(1, "pthread_mutex_lock: %s", strerror(error));
 
 	/* Pick random team */
 	while (1) {
